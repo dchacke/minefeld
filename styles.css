@@ -1,0 +1,15 @@
+#game {
+  padding: 0.5rem;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+#menu {
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.tile {
+  display: inline-block;
+  padding: 0.5rem;
+}
