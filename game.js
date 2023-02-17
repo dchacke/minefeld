@@ -64,6 +64,7 @@ let createTiles = () => {
         $tile.onclick = e => {
           reveal($tile);
           alert('Game over. You hit a mine!');
+          restart();
         }
       }
 
