@@ -27,6 +27,12 @@ let reveal = ($tile, done = new Set()) => {
   $tile.dataset.revealed = true;
   done.add($tile.id);
 
+  if ($tile.dataset.isMine === 'true') {
+    $tile.innerText = 'x';
+  } else if ($tile.dataset.count != '0') {
+    $tile.innerText = $tile.dataset.count;
+  }
+
   if (Number($tile.dataset.count === '0')) {
     getSurrounding($tile)
       .filter($t => !done.has($t.id) && $t.dataset.isMine === 'false' && $t.dataset.revealed === 'false')
@@ -54,8 +60,8 @@ let createTiles = () => {
       $tile.dataset.column = j;
 
       if (isMine) {
-        $tile.innerHTML = 'x';
         $tile.onclick = e => {
+          reveal($tile);
           alert('Game over. You hit a mine!');
         }
       }
@@ -85,7 +91,6 @@ let createTiles = () => {
           .filter($el => $el.dataset.isMine === 'true')
           .length;
 
-        $tile.innerHTML = count;
         $tile.dataset.count = count;
 
         if ($tile.dataset.revealed === 'false') {
