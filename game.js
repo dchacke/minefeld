@@ -1,4 +1,5 @@
 let $tiles = document.getElementById('tiles');
+let $newGame = document.getElementById('new-game');
 let rows = 9;
 let columns = 9;
 
@@ -77,4 +78,15 @@ let createTiles = () => {
   }
 };
 
+let reset = () => {
+  $tiles.innerHTML = '';
+};
+
+let restart = () => {
+  reset();
+  createTiles();
+};
+
 createTiles();
+
+$newGame.onclick = restart;
