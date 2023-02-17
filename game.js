@@ -51,6 +51,7 @@ let createTiles = () => {
 
       $tile.classList.add('tile');
       $tile.id = `tile_${i}_${j}`;
+      $tile.innerHTML = '&nbsp;';
 
       let isMine = Math.random() > 0.9;
 
