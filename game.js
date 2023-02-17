@@ -61,6 +61,20 @@ let createTiles = () => {
       $row.appendChild($tile);
     }
   }
+
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < columns; j++) {
+      let $tile = document.getElementById(`tile_${i}_${j}`);
+
+      if ($tile.dataset.isMine === 'false') {
+        let count = getSurrounding($tile)
+          .filter($el => $el.dataset.isMine === 'true')
+          .length;
+
+        $tile.innerHTML = count;
+      }
+    }
+  }
 };
 
 createTiles();
