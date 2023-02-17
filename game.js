@@ -1,5 +1,7 @@
 let $tiles = document.getElementById('tiles');
 let $newGame = document.getElementById('new-game');
+let $seconds = document.getElementById('seconds');
+
 let rows = 9;
 let columns = 9;
 
@@ -78,15 +80,26 @@ let createTiles = () => {
   }
 };
 
+let interval;
+
 let reset = () => {
+  clearInterval(interval);
   $tiles.innerHTML = '';
+  $seconds.innerText = '0';
+};
+
+let countTime = () => {
+  interval = setInterval(() => {
+    $seconds.innerText = Number($seconds.innerText) + 1;
+  }, 1000);
 };
 
 let restart = () => {
   reset();
   createTiles();
+  countTime();
 };
 
-createTiles();
+restart();
 
 $newGame.onclick = restart;
