@@ -25,6 +25,7 @@ let getSurrounding = $tile => {
 
 let reveal = ($tile, done = new Set()) => {
   $tile.dataset.revealed = true;
+  $tile.dataset.flagged = false;
   done.add($tile.id);
 
   if ($tile.dataset.isMine === 'true') {
@@ -66,6 +67,16 @@ let createTiles = () => {
           alert('Game over. You hit a mine!');
           restart();
         }
+      }
+
+      $tile.oncontextmenu = e => {
+        if ($tile.dataset.flagged === 'true') {
+          $tile.dataset.flagged = false;
+        } else if ($tile.dataset.revealed != 'true') {
+          $tile.dataset.flagged = true;
+        }
+
+        e.preventDefault();
       }
 
       $tile.onmouseenter = e => {
