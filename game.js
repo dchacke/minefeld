@@ -82,16 +82,16 @@ let createTiles = () => {
 
 let interval;
 
-let reset = () => {
-  clearInterval(interval);
-  $tiles.innerHTML = '';
-  $seconds.innerText = '0';
-};
-
 let countTime = () => {
   interval = setInterval(() => {
     $seconds.innerText = Number($seconds.innerText) + 1;
   }, 1000);
+};
+
+let reset = () => {
+  clearInterval(interval);
+  $tiles.innerHTML = '';
+  $seconds.innerText = '0';
 };
 
 let restart = () => {
@@ -100,6 +100,6 @@ let restart = () => {
   countTime();
 };
 
-restart();
-
 $newGame.onclick = restart;
+
+restart();
