@@ -1,9 +1,11 @@
 let $tiles = document.getElementById('tiles');
 let $newGame = document.getElementById('new-game');
 let $seconds = document.getElementById('seconds');
+let $mineCount = document.getElementById('mine-count');
 
 let rows = 9;
 let columns = 9;
+let mines = 0;
 
 let getSurrounding = $tile => {
   let row = Number($tile.dataset.row);
@@ -25,7 +27,12 @@ let getSurrounding = $tile => {
 
 let reveal = ($tile, done = new Set()) => {
   $tile.dataset.revealed = true;
-  $tile.dataset.flagged = false;
+
+  if ($tile.dataset.flagged === 'true') {
+    $tile.dataset.flagged = false;
+    updateMineCount(mines + 1);
+  }
+
   done.add($tile.id);
 
   if ($tile.dataset.isMine === 'true') {
@@ -62,6 +69,8 @@ let createTiles = () => {
       $tile.dataset.column = j;
 
       if (isMine) {
+        mines++;
+
         $tile.onclick = e => {
           reveal($tile);
           alert('Game over. You hit a mine!');
@@ -72,8 +81,10 @@ let createTiles = () => {
       $tile.oncontextmenu = e => {
         if ($tile.dataset.flagged === 'true') {
           $tile.dataset.flagged = false;
+          updateMineCount(mines + 1);
         } else if ($tile.dataset.revealed != 'true') {
           $tile.dataset.flagged = true;
+          updateMineCount(mines - 1);
         }
 
         e.preventDefault();
@@ -94,6 +105,8 @@ let createTiles = () => {
       $row.appendChild($tile);
     }
   }
+
+  updateMineCount(mines);
 
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < columns; j++) {
@@ -124,8 +137,14 @@ let countTime = () => {
   }, 1000);
 };
 
+let updateMineCount = count => {
+  mines = count;
+  $mineCount.innerText = count;
+};
+
 let reset = () => {
   clearInterval(interval);
+  updateMineCount(0);
   $tiles.innerHTML = '';
   $seconds.innerText = '0';
 };
