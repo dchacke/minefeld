@@ -16,3 +16,11 @@
   width: 1rem;
   height: 1rem;
 }
+
+.surrounding {
+  border: 1px solid orange;
+}
+
+.hovered {
+  border: 1px solid red;
+}
