@@ -3,11 +3,6 @@ let $tiles = document.getElementById('tiles');
 let createTiles = () => {
   let rows = 9;
   let columns = 9;
-  let mines = 10;
-
-  if (mines > rows * columns) {
-    return alert('Cannot have more mines than tiles.');
-  }
 
   for (let i = 0; i < rows; i++) {
     let $row = document.createElement('div');
@@ -18,7 +13,15 @@ let createTiles = () => {
       let $tile = document.createElement('div');
 
       $tile.classList.add('tile');
-      $tile.innerHTML = 'x';
+
+      let isMine = Math.random() > 0.9;
+
+      $tile.dataset.isMine = isMine;
+
+      if (isMine) {
+        $tile.innerHTML = 'x';
+      }
+
       $row.appendChild($tile);
     }
   }
