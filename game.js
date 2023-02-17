@@ -20,6 +20,9 @@ let createTiles = () => {
 
       if (isMine) {
         $tile.innerHTML = 'x';
+        $tile.onclick = e => {
+          alert('Game over. You hit a mine!');
+        }
       }
 
       $row.appendChild($tile);
