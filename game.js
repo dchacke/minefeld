@@ -19,7 +19,6 @@ let getSurrounding = $tile => {
   return affectedRows
     .map(i => {
       return affectedColumns
-        // .filter(j => i != row && j != column)
         .map(j => document.getElementById(`tile_${i}_${j}`));
     }).flat();
 };
