@@ -18,6 +18,10 @@
   text-align: center;
 }
 
+.tile[data-revealed=false] {
+  background-color: gray;
+}
+
 .surrounding {
   border: 1px solid orange;
 }

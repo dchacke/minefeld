@@ -24,6 +24,17 @@ let getSurrounding = $tile => {
     }).flat();
 };
 
+let reveal = ($tile, done = new Set()) => {
+  $tile.dataset.revealed = true;
+  done.add($tile.id);
+
+  if (Number($tile.dataset.count === '0')) {
+    getSurrounding($tile)
+      .filter($t => !done.has($t.id) && $t.dataset.isMine === 'false' && $t.dataset.revealed === 'false')
+      .forEach($t => reveal($t, done));
+  }
+};
+
 let createTiles = () => {
   for (let i = 0; i < rows; i++) {
     let $row = document.createElement('div');
@@ -39,6 +50,7 @@ let createTiles = () => {
       let isMine = Math.random() > 0.9;
 
       $tile.dataset.isMine = isMine;
+      $tile.dataset.revealed = false;
       $tile.dataset.row = i;
       $tile.dataset.column = j;
 
@@ -75,6 +87,13 @@ let createTiles = () => {
           .length;
 
         $tile.innerHTML = count;
+        $tile.dataset.count = count;
+
+        if ($tile.dataset.revealed === 'false') {
+          $tile.onclick = e => {
+            reveal($tile);
+          };
+        }
       }
     }
   }
