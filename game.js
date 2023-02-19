@@ -6,6 +6,8 @@ let $mineCount = document.getElementById('mine-count');
 let rows = 9;
 let columns = 9;
 let mines = 0;
+let flagged = 0;
+let revealed = 0;
 
 let getSurrounding = $tile => {
   let row = Number($tile.dataset.row);
@@ -26,14 +28,19 @@ let getSurrounding = $tile => {
 };
 
 let reveal = ($tile, done = new Set()) => {
+  if (done.has($tile.id)) {
+    return;
+  }
+
   $tile.dataset.revealed = true;
 
   if ($tile.dataset.flagged === 'true') {
     $tile.dataset.flagged = false;
-    updateMineCount(mines + 1);
+    updateMineCountDisplay(flagged - 1);
   }
 
   done.add($tile.id);
+  revealed++;
 
   if ($tile.dataset.isMine === 'true') {
     $tile.innerText = 'x';
@@ -41,9 +48,12 @@ let reveal = ($tile, done = new Set()) => {
     $tile.innerText = $tile.dataset.count;
   }
 
-  if (Number($tile.dataset.count === '0')) {
+  if (revealed === rows * columns - flagged) {
+    alert('Congrats! You beat the game!');
+    restart();
+  } else if (Number($tile.dataset.count) === 0) {
     getSurrounding($tile)
-      .filter($t => !done.has($t.id) && $t.dataset.isMine === 'false' && $t.dataset.revealed === 'false')
+      .filter($t => $t.dataset.isMine === 'false' && $t.dataset.revealed === 'false')
       .forEach($t => reveal($t, done));
   }
 };
@@ -72,6 +82,7 @@ let createTiles = () => {
         mines++;
 
         $tile.onclick = e => {
+          // TODO: Reveal ONLY this one tile, no surrounding
           reveal($tile);
           alert('Game over. You hit a mine!');
           restart();
@@ -81,10 +92,10 @@ let createTiles = () => {
       $tile.oncontextmenu = e => {
         if ($tile.dataset.flagged === 'true') {
           $tile.dataset.flagged = false;
-          updateMineCount(mines + 1);
+          updateMineCountDisplay(flagged - 1);
         } else if ($tile.dataset.revealed != 'true') {
           $tile.dataset.flagged = true;
-          updateMineCount(mines - 1);
+          updateMineCountDisplay(flagged + 1);
         }
 
         e.preventDefault();
@@ -106,7 +117,7 @@ let createTiles = () => {
     }
   }
 
-  updateMineCount(mines);
+  updateMineCountDisplay(flagged);
 
   for (let i = 0; i < rows; i++) {
     for (let j = 0; j < columns; j++) {
@@ -137,14 +148,17 @@ let countTime = () => {
   }, 1000);
 };
 
-let updateMineCount = count => {
-  mines = count;
-  $mineCount.innerText = count;
+let updateMineCountDisplay = count => {
+  flagged = count;
+  $mineCount.innerText = mines - flagged;
 };
 
 let reset = () => {
   clearInterval(interval);
-  updateMineCount(0);
+  updateMineCountDisplay(0);
+  revealed = 0;
+  flagged = 0;
+  mines = 0;
   $tiles.innerHTML = '';
   $seconds.innerText = '0';
 };
