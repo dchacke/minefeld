@@ -2,6 +2,8 @@ let $tiles = document.getElementById('tiles');
 let $newGame = document.getElementById('new-game');
 let $seconds = document.getElementById('seconds');
 let $mineCount = document.getElementById('mine-count');
+let $status = document.getElementById('status');
+let $image = document.getElementById('image');
 
 let rows = 9;
 let columns = 9;
@@ -49,8 +51,8 @@ let reveal = ($tile, done = new Set()) => {
   }
 
   if (revealed === rows * columns - flagged) {
-    alert('Congrats! You beat the game!');
-    restart();
+    $image.src = './happy.gif';
+    $status.innerText = 'Congrats! You beat the game!';
   } else if (Number($tile.dataset.count) === 0) {
     getSurrounding($tile)
       .filter($t => $t.dataset.isMine === 'false' && $t.dataset.revealed === 'false')
@@ -84,8 +86,8 @@ let createTiles = () => {
         $tile.onclick = e => {
           // TODO: Reveal ONLY this one tile, no surrounding
           reveal($tile);
-          alert('Game over. You hit a mine!');
-          restart();
+          $image.src = './lost.gif';
+          $status.innerText = 'Game over. You hit a mine! Newman is pleased...';
         }
       }
 
