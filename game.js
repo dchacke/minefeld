@@ -58,6 +58,7 @@ let reveal = ($tile, done = new Set()) => {
     $status.innerText = 'Congrats! You beat the game!';
     $tiles.classList.add('game-over');
     disabled = true;
+    clearInterval(interval);
   } else if (Number($tile.dataset.count) === 0) {
     getSurrounding($tile)
       .filter($t => $t.dataset.isMine === 'false' && $t.dataset.revealed === 'false')
@@ -99,6 +100,7 @@ let createTiles = () => {
           $status.innerText = 'Game over. You hit a mine! Newman is pleased...';
           $tiles.classList.add('game-over');
           disabled = true;
+          clearInterval(interval);
         }
       }
 
