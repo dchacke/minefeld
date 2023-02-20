@@ -50,7 +50,7 @@ let reveal = ($tile, done = new Set()) => {
     $tile.innerText = $tile.dataset.count;
   }
 
-  if (revealed === rows * columns - flagged) {
+  if (revealed === rows * columns - flagged && mines - flagged === 0) {
     $image.src = './happy.gif';
     $status.innerText = 'Congrats! You beat the game!';
   } else if (Number($tile.dataset.count) === 0) {
