@@ -34,6 +34,14 @@
   content: '🚩';
 }
 
+.tile[data-is-mine=true][data-revealed=true] {
+  background-color: red;
+}
+
+.tile[data-is-mine=true][data-revealed=true]:after {
+  content: '💣';
+}
+
 .surrounding {
   border: 1px solid orange;
 }

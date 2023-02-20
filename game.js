@@ -10,6 +10,7 @@ let columns = 9;
 let mines = 0;
 let flagged = 0;
 let revealed = 0;
+let disabled = false;
 
 let getSurrounding = $tile => {
   let row = Number($tile.dataset.row);
@@ -30,11 +31,15 @@ let getSurrounding = $tile => {
 };
 
 let reveal = ($tile, done = new Set()) => {
-  if (done.has($tile.id)) {
+  if (done.has($tile.id) || disabled) {
     return;
   }
 
   $tile.dataset.revealed = true;
+
+  if ($tile.dataset.isMine === 'true') {
+    return;
+  }
 
   if ($tile.dataset.flagged === 'true') {
     $tile.dataset.flagged = false;
@@ -44,15 +49,14 @@ let reveal = ($tile, done = new Set()) => {
   done.add($tile.id);
   revealed++;
 
-  if ($tile.dataset.isMine === 'true') {
-    $tile.innerText = 'x';
-  } else if ($tile.dataset.count != '0') {
+  if ($tile.dataset.count != '0') {
     $tile.innerText = $tile.dataset.count;
   }
 
   if (revealed === rows * columns - flagged && mines - flagged === 0) {
     $image.src = './happy.gif';
     $status.innerText = 'Congrats! You beat the game!';
+    disabled = true;
   } else if (Number($tile.dataset.count) === 0) {
     getSurrounding($tile)
       .filter($t => $t.dataset.isMine === 'false' && $t.dataset.revealed === 'false')
@@ -84,14 +88,25 @@ let createTiles = () => {
         mines++;
 
         $tile.onclick = e => {
+          if (disabled) {
+            return;
+          }
+
           // TODO: Reveal ONLY this one tile, no surrounding
           reveal($tile);
           $image.src = './lost.gif';
           $status.innerText = 'Game over. You hit a mine! Newman is pleased...';
+          disabled = true;
         }
       }
 
       $tile.oncontextmenu = e => {
+        e.preventDefault();
+
+        if (disabled) {
+          return;
+        }
+
         if ($tile.dataset.flagged === 'true') {
           $tile.dataset.flagged = false;
           updateMineCountDisplay(flagged - 1);
@@ -99,8 +114,6 @@ let createTiles = () => {
           $tile.dataset.flagged = true;
           updateMineCountDisplay(flagged + 1);
         }
-
-        e.preventDefault();
       }
 
       $tile.onmouseenter = e => {
@@ -161,6 +174,7 @@ let reset = () => {
   revealed = 0;
   flagged = 0;
   mines = 0;
+  disabled = false;
   $tiles.innerHTML = '';
   $seconds.innerText = '0';
   $status.innerText = '';
