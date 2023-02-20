@@ -27,7 +27,7 @@
 }
 
 .tile[data-revealed=false] {
-  background-color: gray;
+  background-color: #bdbdbd;
 }
 
 .tile[data-flagged=true]:after {
