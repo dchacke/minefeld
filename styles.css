@@ -38,7 +38,7 @@
   background-color: red;
 }
 
-.tile[data-is-mine=true][data-revealed=true]:after {
+.tile[data-is-mine=true][data-revealed=true]:after, #tiles.game-over .tile[data-is-mine=true]:after {
   content: '💣';
 }
 

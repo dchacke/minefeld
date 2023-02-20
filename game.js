@@ -56,6 +56,7 @@ let reveal = ($tile, done = new Set()) => {
   if (revealed === rows * columns - flagged && mines - flagged === 0) {
     $image.src = './happy.gif';
     $status.innerText = 'Congrats! You beat the game!';
+    $tiles.classList.add('game-over');
     disabled = true;
   } else if (Number($tile.dataset.count) === 0) {
     getSurrounding($tile)
@@ -96,6 +97,7 @@ let createTiles = () => {
           reveal($tile);
           $image.src = './lost.gif';
           $status.innerText = 'Game over. You hit a mine! Newman is pleased...';
+          $tiles.classList.add('game-over');
           disabled = true;
         }
       }
@@ -179,6 +181,7 @@ let reset = () => {
   $seconds.innerText = '0';
   $status.innerText = '';
   $image.removeAttribute('src');
+  $tiles.classList.remove('game-over');
 };
 
 let restart = () => {
