@@ -54,11 +54,7 @@ let reveal = ($tile, done = new Set()) => {
   }
 
   if (revealed === rows * columns - flagged && mines - flagged === 0) {
-    $image.src = './happy.gif';
-    $status.innerText = 'Congrats! You beat the game!';
-    $tiles.classList.add('game-over');
-    disabled = true;
-    clearInterval(interval);
+    endGame(true);
   } else if (Number($tile.dataset.count) === 0) {
     getSurrounding($tile)
       .filter($t => $t.dataset.isMine === 'false' && $t.dataset.revealed === 'false')
@@ -96,11 +92,7 @@ let createTiles = () => {
 
           // TODO: Reveal ONLY this one tile, no surrounding
           reveal($tile);
-          $image.src = './lost.gif';
-          $status.innerText = 'Game over. You hit a mine! Newman is pleased...';
-          $tiles.classList.add('game-over');
-          disabled = true;
-          clearInterval(interval);
+          endGame(false);
         }
       }
 
@@ -190,6 +182,20 @@ let restart = () => {
   reset();
   createTiles();
   countTime();
+};
+
+let endGame = won => {
+  if (won) {
+    $image.src = './happy.gif';
+    $status.innerText = 'Congrats! You beat the game!';
+  } else {
+    $image.src = './lost.gif';
+    $status.innerText = 'Game over. You hit a mine! Newman is pleased...';
+  }
+
+  $tiles.classList.add('game-over');
+  disabled = true;
+  clearInterval(interval);
 };
 
 $newGame.onclick = restart;
