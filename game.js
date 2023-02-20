@@ -53,7 +53,7 @@ let reveal = ($tile, done = new Set()) => {
     $tile.innerText = $tile.dataset.count;
   }
 
-  if (revealed === rows * columns - flagged && mines - flagged === 0) {
+  if (hasWon()) {
     endGame(true);
   } else if (Number($tile.dataset.count) === 0) {
     getSurrounding($tile)
@@ -109,6 +109,10 @@ let createTiles = () => {
         } else if ($tile.dataset.revealed != 'true') {
           $tile.dataset.flagged = true;
           updateMineCountDisplay(flagged + 1);
+        }
+
+        if (hasWon()) {
+          endGame(true);
         }
       }
 
@@ -196,6 +200,10 @@ let endGame = won => {
   $tiles.classList.add('game-over');
   disabled = true;
   clearInterval(interval);
+};
+
+let hasWon = () => {
+  return revealed === rows * columns - flagged && mines - flagged === 0;
 };
 
 $newGame.onclick = restart;
