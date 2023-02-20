@@ -163,6 +163,8 @@ let reset = () => {
   mines = 0;
   $tiles.innerHTML = '';
   $seconds.innerText = '0';
+  $status.innerText = '';
+  $image.removeAttribute('src');
 };
 
 let restart = () => {
